@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
 
     public void reload(){
         //colour all selected red (resource intensive)
+        boolean[] oldSelected = selected.clone();
         selected = new boolean[100];
         for (ArrayList<Direction> selection : selectionArray){
             for (Direction letter : selection){
@@ -92,7 +94,8 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
             }
         }
 
-        this.notifyDataSetChanged();
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtilCalculator(grid,oldSelected,selected));
+        diffResult.dispatchUpdatesTo(this);
 
     }
 
