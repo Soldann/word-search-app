@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
                     letter.setBackgroundColor(Color.RED);
                 }
             }
+        } else if (event.getAction() == MotionEvent.ACTION_UP){
+            letterAdapter.notifyDataSetChanged(); //reset grid
         }
 
     }
