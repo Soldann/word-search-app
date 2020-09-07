@@ -1,5 +1,7 @@
 package com.landson.wordsearch;
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
@@ -141,10 +143,27 @@ public class Model extends ViewModel {
         return false;
     }
 
-    public void validateSelection(){
+    public boolean validateSelection(){ //return true if modified
         if (selectionArray.size() - 1 >= 0){
-            selectionArray.remove(selectionArray.size() - 1);
+            ArrayList<Direction> lastSelection = selectionArray.get(selectionArray.size() - 1);
+            StringBuilder selectedWordBuilder = new StringBuilder();
+            for (int i = 1; i < lastSelection.size(); ++i){ //skip first letter since that's the start value of the selection
+                Direction letter = lastSelection.get(i);
+                selectedWordBuilder.append(grid.get(letter.y).get(letter.x));
+            }
+            String selectedWord = selectedWordBuilder.toString();
+            String reverseSelectedWord = selectedWordBuilder.reverse().toString();
+
+            for (Word word : words){
+                Log.d("wordcheck", "checking " + selectedWord);
+                if (word.word.equals(selectedWord) || word.word.equals(reverseSelectedWord)){
+                    Log.d("wordcheck", "Found word "+ selectedWord);
+                    word.found = true;
+                    return false; //no need to update view, word is correct
+                }
+            }
         }
+        return cancelSelection(); //word does not match or invalid selection
     }
 
 }

@@ -58,13 +58,15 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         if (event.getAction() == MotionEvent.ACTION_DOWN){
             Log.d("touch", "start position is x " + positionX + " and y " + positionY);
             model.startSelection(positionX,positionY);
+            model.setLastSelectionEnd(positionX,positionY); //need to run this in case user releases without moving
             reloadNecessary = true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE){
             Log.d("touch", "Moved to x " + positionX + " and y " + positionY);
             reloadNecessary = model.setLastSelectionEnd(positionX,positionY);
         } else if (event.getAction() == MotionEvent.ACTION_UP){
             Log.d("touch", "reset");
-            reloadNecessary = model.cancelSelection();
+            reloadNecessary = model.validateSelection();
+            Log.d("wordcheck", model.words.get(0).found.toString());
         }
 
         if (reloadNecessary){
