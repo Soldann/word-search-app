@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements LetterAdapter.LetterClickListener {
@@ -23,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
     RecyclerView wordGrid;
 
     Direction selectionStart; //holds beginning of any touch selection
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,27 +47,27 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
 
         wordGrid = findViewById(R.id.wordGrid);
         wordGrid.setLayoutManager(new GridLayoutManager(this,model.size));
-        letterAdapter  = new LetterAdapter(model.grid);
+        letterAdapter  = new LetterAdapter(model.grid, model.selectionArray, wordGrid);
         wordGrid.addOnItemTouchListener(new LetterTouchListener(this,model.size));
         wordGrid.setAdapter(letterAdapter);
     }
 
     @Override
     public void onLetterTouch(View v, int positionX, int positionY, MotionEvent event) {
+        boolean reloadNecessary = false;
         if (event.getAction() == MotionEvent.ACTION_DOWN){
             Log.d("touch", "start position is x " + positionX + " and y " + positionY);
-            selectionStart = new Direction(positionX,positionY);
+            model.startSelection(positionX,positionY);
+            reloadNecessary = true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE){
             Log.d("touch", "Moved to x " + positionX + " and y " + positionY);
-            for (int i = Math.min(positionX, selectionStart.x); i <= Math.max(positionX, selectionStart.x); ++i){
-                Log.d("touch", "" + letterAdapter.getPositionFromCoordinate(i,positionY));
-                TextView letter = (TextView) wordGrid.getLayoutManager().findViewByPosition(letterAdapter.getPositionFromCoordinate(i,positionY)).findViewById(R.id.letter);
-                if (letter != null){
-                    letter.setBackgroundColor(Color.RED);
-                }
-            }
+            reloadNecessary = model.setLastSelectionEnd(positionX,positionY);
         } else if (event.getAction() == MotionEvent.ACTION_UP){
-            letterAdapter.notifyDataSetChanged(); //reset grid
+            reloadNecessary = model.cancelSelection();
+        }
+
+        if (reloadNecessary){
+            letterAdapter.reload();
         }
 
     }

@@ -11,6 +11,7 @@ public class Model extends ViewModel {
     int size; //grid size
     ArrayList<ArrayList<Character>> grid;
     ArrayList<Word> words;
+    ArrayList<ArrayList<Direction>> selectionArray;
 
     Random random = new Random();
 
@@ -21,6 +22,7 @@ public class Model extends ViewModel {
             grid.add(i, new ArrayList<Character>(Collections.nCopies(size,(Character) null)));
         }
         words = new ArrayList<>();
+        selectionArray = new ArrayList<>();
     }
 
     public void addWord(String w){
@@ -89,6 +91,62 @@ public class Model extends ViewModel {
             }
         }
         return true;
+    }
+
+    public void startSelection(int x, int y){
+        ArrayList<Direction> selection = new ArrayList<>();
+        selection.add(new Direction(x,y));
+        selectionArray.add(selection);
+    }
+
+    public boolean setLastSelectionEnd(int x, int y){ //return true if modified
+        if (selectionArray.size() - 1 >= 0){
+            ArrayList<Direction> lastSelection = selectionArray.get(selectionArray.size() - 1);
+            Direction start = lastSelection.get(0);
+
+            ArrayList<Direction> newSelection = new ArrayList<>();
+            newSelection.add(start);
+
+            selectionArray.remove(lastSelection);
+            selectionArray.add(newSelection);
+
+            if (Math.abs(start.x - x) > Math.abs(start.y - y)){
+                for (int i = Math.min(x, start.x); i <= Math.max(x,start.x); ++i){
+                    newSelection.add(new Direction(i,start.y));
+                }
+            } else {
+                for (int i = Math.min(y, start.y); i <= Math.max(y,start.y); ++i){
+                    newSelection.add(new Direction(start.x,i));
+                }
+            }
+
+            if (newSelection.size() == lastSelection.size()){
+                for (int i = 0; i < newSelection.size(); ++i){
+                    if (newSelection.get(i).x != lastSelection.get(i).x || newSelection.get(i).y != lastSelection.get(i).y){
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean cancelSelection(){ //return true if modified
+        if (selectionArray.size() - 1 >= 0){
+            ArrayList<Direction> deleted = selectionArray.get(selectionArray.size() - 1);
+            selectionArray.remove(selectionArray.size() - 1);
+            return true;
+        }
+        return false;
+    }
+
+    public void validateSelection(){
+        if (selectionArray.size() - 1 >= 0){
+            selectionArray.remove(selectionArray.size() - 1);
+        }
     }
 
 }

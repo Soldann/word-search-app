@@ -1,5 +1,6 @@
 package com.landson.wordsearch;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,7 +16,15 @@ import java.util.ArrayList;
 public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder> {
 
     private ArrayList<ArrayList<Character>> grid;
-    LetterAdapter(ArrayList<ArrayList<Character>> g) { this.grid = g; }
+    private ArrayList<ArrayList<Direction>> selectionArray;
+    private boolean[] selected;
+    private RecyclerView rv;
+    LetterAdapter(ArrayList<ArrayList<Character>> g, ArrayList<ArrayList<Direction>> selectionArray, RecyclerView rv) {
+        this.grid = g;
+        this.selectionArray = selectionArray;
+        this.rv = rv;
+        selected = new boolean[100];
+    }
 
     @NonNull
     @Override
@@ -34,6 +43,10 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
             holder.letter.setText(letter.toString());
         }
 
+        if (selected[position]){
+            holder.letter.setBackgroundColor(Color.RED);
+        }
+
     }
 
     @Override
@@ -43,6 +56,12 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
             count += row.size();
         }
         return count;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        rv = recyclerView;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,6 +81,19 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
 
     public interface LetterClickListener {
         void onLetterTouch(View v, int positionX, int positionY, MotionEvent event);
+    }
+
+    public void reload(){
+        //colour all selected red (resource intensive)
+        selected = new boolean[100];
+        for (ArrayList<Direction> selection : selectionArray){
+            for (Direction letter : selection){
+                selected[getPositionFromCoordinate(letter.x,letter.y)] = true;
+            }
+        }
+
+        this.notifyDataSetChanged();
+
     }
 
 }
