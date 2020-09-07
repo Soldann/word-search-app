@@ -3,13 +3,17 @@ package com.landson.wordsearch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.GridView;
 
 public class MainActivity extends AppCompatActivity {
 
     Model model;
+    LetterAdapter letterAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
         model.generate(0);
         Log.d("Grid", String.valueOf(model.grid));
+
+        RecyclerView wordGrid = findViewById(R.id.wordGrid);
+        wordGrid.setLayoutManager(new GridLayoutManager(this,model.size));
+        letterAdapter  = new LetterAdapter(model.grid);
+        wordGrid.setAdapter(letterAdapter);
+
     }
 }
