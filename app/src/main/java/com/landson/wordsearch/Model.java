@@ -51,6 +51,8 @@ public class Model extends ViewModel {
         directions.add(new Direction(1,-1)); //diagonal up right
         directions.add(new Direction(1,1)); //diagonal down right
 
+        Collections.shuffle(directions); //randomize direction
+
         Direction position = new Direction(random.nextInt(size), random.nextInt(size));
 
         //try every direction
