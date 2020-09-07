@@ -16,6 +16,10 @@ public class Model extends ViewModel {
 
     public Model(){
         size = 10; //set default wordsearch size to 10
+        grid = new ArrayList<>(size); //initialize empty arraylist
+        for (int i = 0; i < size; ++i){
+            grid.add(i, new ArrayList<Character>(Collections.nCopies(size,(Character) null)));
+        }
         words = new ArrayList<>();
     }
 
@@ -29,12 +33,12 @@ public class Model extends ViewModel {
 
     private boolean generateHelper(int tries){ //return true if successful, false if not
 
-        if (tries < 100){
+        if (tries < 500){
             Collections.shuffle(words);
 
-            grid = new ArrayList<>(size); //reset grid
+            //reset grid
             for (int i = 0; i < size; ++i){
-                grid.add(i, new ArrayList<Character>(Collections.nCopies(size,(Character) null)));
+                grid.set(i, new ArrayList<Character>(Collections.nCopies(size,(Character) null)));
             }
 
             for (Word w : words){
