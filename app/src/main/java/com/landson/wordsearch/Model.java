@@ -60,8 +60,6 @@ public class Model extends ViewModel {
         directions.add(new Direction(1,0)); //right
         directions.add(new Direction(0,-1)); //up
         directions.add(new Direction(0,1)); //down
-        directions.add(new Direction(1,-1)); //diagonal up right
-        directions.add(new Direction(1,1)); //diagonal down right
 
         Collections.shuffle(directions); //randomize direction
 
