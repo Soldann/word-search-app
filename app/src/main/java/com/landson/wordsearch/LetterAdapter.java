@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder> {
 
@@ -46,6 +47,8 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
 
         if (selected[position]){
             holder.letter.setBackgroundColor(Color.RED);
+        } else {
+            holder.letter.setBackgroundColor(Color.TRANSPARENT);
         }
 
     }
@@ -93,6 +96,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
                 selected[getPositionFromCoordinate(letter.x,letter.y)] = true;
             }
         }
+        Log.d("touch", Arrays.toString(selected));
 
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtilCalculator(grid,oldSelected,selected));
         diffResult.dispatchUpdatesTo(this);

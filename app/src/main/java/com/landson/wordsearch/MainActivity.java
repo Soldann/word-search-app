@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
             Log.d("touch", "Moved to x " + positionX + " and y " + positionY);
             reloadNecessary = model.setLastSelectionEnd(positionX,positionY);
         } else if (event.getAction() == MotionEvent.ACTION_UP){
+            Log.d("touch", "reset");
             reloadNecessary = model.cancelSelection();
         }
 
