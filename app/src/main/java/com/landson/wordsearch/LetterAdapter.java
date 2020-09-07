@@ -2,6 +2,7 @@ package com.landson.wordsearch;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,5 +53,15 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
             super(itemView);
             letter = itemView.findViewById(R.id.letter);
         }
+
     }
+
+    public int getPositionFromCoordinate(int x, int y){
+        return x + y * grid.size();
+    }
+
+    public interface LetterClickListener {
+        void onLetterTouch(View v, int positionX, int positionY, MotionEvent event);
+    }
+
 }

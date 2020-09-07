@@ -6,14 +6,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Collections;
+
+public class MainActivity extends AppCompatActivity implements LetterAdapter.LetterClickListener {
 
     Model model;
     LetterAdapter letterAdapter;
+    RecyclerView wordGrid;
+
+    Direction selectionStart; //holds beginning of any touch selection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +45,28 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("Grid", String.valueOf(model.grid));
 
-        RecyclerView wordGrid = findViewById(R.id.wordGrid);
+        wordGrid = findViewById(R.id.wordGrid);
         wordGrid.setLayoutManager(new GridLayoutManager(this,model.size));
         letterAdapter  = new LetterAdapter(model.grid);
+        wordGrid.addOnItemTouchListener(new LetterTouchListener(this,model.size));
         wordGrid.setAdapter(letterAdapter);
+    }
+
+    @Override
+    public void onLetterTouch(View v, int positionX, int positionY, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            Log.d("touch", "start position is x " + positionX + " and y " + positionY);
+            selectionStart = new Direction(positionX,positionY);
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE){
+            Log.d("touch", "Moved to x " + positionX + " and y " + positionY);
+            for (int i = Math.min(positionX, selectionStart.x); i <= Math.max(positionX, selectionStart.x); ++i){
+                Log.d("touch", "" + letterAdapter.getPositionFromCoordinate(i,positionY));
+                TextView letter = (TextView) wordGrid.getLayoutManager().findViewByPosition(letterAdapter.getPositionFromCoordinate(i,positionY)).findViewById(R.id.letter);
+                if (letter != null){
+                    letter.setBackgroundColor(Color.RED);
+                }
+            }
+        }
 
     }
 }
