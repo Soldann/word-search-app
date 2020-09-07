@@ -23,7 +23,11 @@ public class Model extends ViewModel {
         words.add(new Word(w));
     }
 
-    public void generate(int tries){
+    public boolean generate(){
+        return generateHelper(0);
+    }
+
+    private boolean generateHelper(int tries){ //return true if successful, false if not
 
         if (tries < 100){
             Collections.shuffle(words);
@@ -35,10 +39,12 @@ public class Model extends ViewModel {
 
             for (Word w : words){
                 if (!placeWord(w)){
-                    generate(tries + 1); //try again
-                    return;
+                    return generateHelper(tries + 1); //try again
                 }
             }
+            return true;
+        } else {
+            return false;
         }
     }
 

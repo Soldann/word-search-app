@@ -28,7 +28,12 @@ public class MainActivity extends AppCompatActivity {
         model.addWord("java");
         model.addWord("mobile");
 
-        model.generate(0);
+        if (model.generate()){
+            Log.d("Generator","SUCCESS");
+        } else {
+            Log.d("Generator","FAILURE");
+        }
+
         Log.d("Grid", String.valueOf(model.grid));
 
         RecyclerView wordGrid = findViewById(R.id.wordGrid);
