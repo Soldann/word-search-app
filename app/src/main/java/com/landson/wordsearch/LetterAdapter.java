@@ -26,7 +26,6 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.d("Position","" + position);
         Character letter = grid.get((position / grid.size()) % grid.size()).get(position % grid.size());
         if (letter == null){
             holder.letter.setText(" ");
