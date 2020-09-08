@@ -51,7 +51,17 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         Log.d("Grid", String.valueOf(model.grid));
 
         wordGrid = findViewById(R.id.wordGrid);
-        wordGrid.setLayoutManager(new GridLayoutManager(this,model.size));
+        wordGrid.setLayoutManager(new GridLayoutManager(this,model.size){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+        });
         letterAdapter  = new LetterAdapter(model.grid, model.selectionArray, wordGrid);
         wordGrid.addOnItemTouchListener(new LetterTouchListener(this,model.size));
         wordGrid.setAdapter(letterAdapter);
