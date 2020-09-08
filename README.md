@@ -1,4 +1,4 @@
-word-search-app
+# word-search-app
 
 This Android app implements a word search game.
 
