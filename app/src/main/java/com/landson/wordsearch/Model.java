@@ -166,4 +166,13 @@ public class Model extends ViewModel {
         return cancelSelection(); //word does not match or invalid selection
     }
 
+    public boolean checkVictory(){
+        for (Word word : words){
+            if (!word.found){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.landson.wordsearch;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,8 +76,25 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         } else if (event.getAction() == MotionEvent.ACTION_UP){
             Log.d("touch", "reset");
             reloadNecessary = model.validateSelection();
-            Log.d("wordcheck", model.words.get(0).found.toString());
-            wordAdapter.notifyDataSetChanged();
+
+            if (!reloadNecessary){ //reload necessary implies selection invalid
+                wordAdapter.notifyDataSetChanged();
+                if (model.checkVictory()){
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                    alertBuilder.setMessage("You Win!");
+
+                    alertBuilder.setPositiveButton("RESTART",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //restart code
+                                }
+                            });
+
+                    alertBuilder.create().show();
+                }
+            }
+
         }
 
         if (reloadNecessary){
