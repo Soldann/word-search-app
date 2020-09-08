@@ -64,36 +64,20 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
 
     @Override
     public void onLetterTouch(View v, int positionX, int positionY, MotionEvent event) {
+        Log.d("tEvent", event.toString());
         boolean reloadNecessary = false;
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            validateSelection(); //must run this because last selection won't be cleared if you drag out of the recyclerview
             Log.d("touch", "start position is x " + positionX + " and y " + positionY);
-            model.startSelection(positionX,positionY);
-            model.setLastSelectionEnd(positionX,positionY); //need to run this in case user releases without moving
+            model.startSelection(positionX, positionY);
+            model.setLastSelectionEnd(positionX, positionY); //need to run this in case user releases without moving
             reloadNecessary = true;
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE){
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             Log.d("touch", "Moved to x " + positionX + " and y " + positionY);
-            reloadNecessary = model.setLastSelectionEnd(positionX,positionY);
+            reloadNecessary = model.setLastSelectionEnd(positionX, positionY);
         } else if (event.getAction() == MotionEvent.ACTION_UP){
             Log.d("touch", "reset");
-            reloadNecessary = model.validateSelection();
-
-            if (!reloadNecessary){ //reload necessary implies selection invalid
-                wordAdapter.notifyDataSetChanged();
-                if (model.checkVictory()){
-                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-                    alertBuilder.setMessage("You Win!");
-
-                    alertBuilder.setPositiveButton("RESTART",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    //restart code
-                                }
-                            });
-
-                    alertBuilder.create().show();
-                }
-            }
+            reloadNecessary = validateSelection();
 
         }
 
@@ -101,5 +85,29 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
             letterAdapter.reload();
         }
 
+    }
+
+    private boolean validateSelection(){
+        boolean res = model.validateSelection();
+
+        if (!res){ //reload necessary implies selection invalid
+            wordAdapter.notifyDataSetChanged();
+            if (model.checkVictory()){
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setMessage("You Win!");
+
+                alertBuilder.setPositiveButton("RESTART",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //restart code
+                            }
+                        });
+
+                alertBuilder.create().show();
+            }
+        }
+
+        return res;
     }
 }
