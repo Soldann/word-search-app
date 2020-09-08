@@ -91,7 +91,7 @@ public class Model extends ViewModel {
         for (int i = 0; i < w.word.length(); ++i){
             Direction tryPosition = new Direction(position.x + i*wordDirection.x, position.y + i*wordDirection.y);
             if (tryPosition.x < 0 || tryPosition.y < 0 || tryPosition.x >= size || tryPosition.y >= size
-                    || grid.get(tryPosition.y).get(tryPosition.x) != null){
+                    || grid.get(tryPosition.y).get(tryPosition.x) != null && grid.get(tryPosition.y).get(tryPosition.x) != w.word.charAt(i)){
                 return false;
             }
         }
