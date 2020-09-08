@@ -14,6 +14,7 @@ public class Model extends ViewModel {
     ArrayList<ArrayList<Character>> grid;
     ArrayList<Word> words;
     ArrayList<ArrayList<Direction>> selectionArray;
+    boolean fillEmptySpace = true; //boolean to not fill empty space when debugging
 
     Random random = new Random();
 
@@ -32,7 +33,9 @@ public class Model extends ViewModel {
     }
 
     public boolean generate(){
-        return generateHelper(0);
+        boolean res = generateHelper(0);
+        fillEmpty();
+        return res;
     }
 
     private boolean generateHelper(int tries){ //return true if successful, false if not
@@ -187,6 +190,16 @@ public class Model extends ViewModel {
         selectionArray.clear();
 
         return generate();
+    }
+
+    private void fillEmpty(){
+        for (ArrayList<Character> row : grid){
+            for (int i = 0; i < row.size(); ++i){
+                if (row.get(i) == null){
+                    row.set(i,(char) (random.nextInt(26) + 'A'));
+                }
+            }
+        }
     }
 
 }
