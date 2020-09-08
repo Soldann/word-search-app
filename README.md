@@ -7,7 +7,7 @@ This Android app implements a word search game.
 - Includes the following words: ```SWIFT```, ```KOTLIN```, ```OBJECTIVEC```, ```VARIABLE```, ```JAVA```, ```MOBILE```
 - Keeps track of words that have been found
 - Randomized word placement (Can appear forwards, backwards, upwards, or downwards);
-- Click and drag to select words
+- Click and drag to select words (swipe direction matters)
 
 ### Example
 When you start the game, you are greeted with a screen like below.
