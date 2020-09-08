@@ -156,12 +156,18 @@ public class Model extends ViewModel {
                 Direction letter = lastSelection.get(i);
                 selectedWordBuilder.append(grid.get(letter.y).get(letter.x));
             }
-            String selectedWord = selectedWordBuilder.toString();
-            String reverseSelectedWord = selectedWordBuilder.reverse().toString();
+
+            String selectedWord;
+
+            if (lastSelection.get(0).y == lastSelection.get(1).y && lastSelection.get(0).x == lastSelection.get(1).x){
+                selectedWord = selectedWordBuilder.toString();
+            } else {
+                selectedWord = selectedWordBuilder.reverse().toString();
+            }
 
             for (Word word : words){
                 Log.d("wordcheck", "checking " + selectedWord);
-                if (word.word.equals(selectedWord) || word.word.equals(reverseSelectedWord)){
+                if (word.word.equals(selectedWord)){
                     Log.d("wordcheck", "Found word "+ selectedWord);
                     word.found = true;
                     return false; //no need to update view, word is correct
