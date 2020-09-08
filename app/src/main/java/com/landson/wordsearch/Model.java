@@ -175,4 +175,18 @@ public class Model extends ViewModel {
         return true;
     }
 
+
+    public boolean restart(){
+        for (Word w : words){
+            w.found = false;
+        }
+        grid.clear();
+        for (int i = 0; i < size; ++i){
+            grid.add(i, new ArrayList<Character>(Collections.nCopies(size,(Character) null)));
+        }
+        selectionArray.clear();
+
+        return generate();
+    }
+
 }

@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //restart code
+                                model.restart(); //toss away model and make a new one
+                                //reload views
+                                letterAdapter.reset();
+                                wordAdapter.notifyDataSetChanged();
                             }
                         });
 

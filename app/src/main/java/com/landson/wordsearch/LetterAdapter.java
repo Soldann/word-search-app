@@ -103,4 +103,9 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.ViewHolder
 
     }
 
+    public void reset(){
+        selected = new boolean[100];
+        notifyDataSetChanged();
+    }
+
 }
