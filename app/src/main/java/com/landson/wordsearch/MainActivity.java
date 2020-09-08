@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
     Model model;
     LetterAdapter letterAdapter;
     RecyclerView wordGrid;
+    RecyclerView wordList;
+    WordAdapter wordAdapter;
 
     Direction selectionStart; //holds beginning of any touch selection
     @Override
@@ -50,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         letterAdapter  = new LetterAdapter(model.grid, model.selectionArray, wordGrid);
         wordGrid.addOnItemTouchListener(new LetterTouchListener(this,model.size));
         wordGrid.setAdapter(letterAdapter);
+
+        wordList = findViewById(R.id.wordList);
+        wordList.setLayoutManager(new LinearLayoutManager(this));
+        wordAdapter = new WordAdapter(model.words);
+        wordList.setAdapter(wordAdapter);
     }
 
     @Override
@@ -67,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
             Log.d("touch", "reset");
             reloadNecessary = model.validateSelection();
             Log.d("wordcheck", model.words.get(0).found.toString());
+            wordAdapter.notifyDataSetChanged();
         }
 
         if (reloadNecessary){
