@@ -34,7 +34,9 @@ public class Model extends ViewModel {
 
     public boolean generate(){
         boolean res = generateHelper(0);
-        fillEmpty();
+        if (fillEmptySpace){
+            fillEmpty();
+        }
         return res;
     }
 
