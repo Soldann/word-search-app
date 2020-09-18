@@ -15,6 +15,7 @@ public class Model extends ViewModel {
     ArrayList<Word> words;
     ArrayList<ArrayList<Direction>> selectionArray;
     boolean fillEmptySpace = true; //boolean to not fill empty space when debugging
+    boolean initialized; //boolean to keep track of if game has been initialized
 
     Random random = new Random();
 
@@ -26,6 +27,7 @@ public class Model extends ViewModel {
         }
         words = new ArrayList<>();
         selectionArray = new ArrayList<>();
+        initialized = false;
     }
 
     public void addWord(String w){

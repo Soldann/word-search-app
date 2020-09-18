@@ -35,20 +35,23 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         setContentView(R.layout.activity_main);
         model = new ViewModelProvider(this).get(Model.class);
 
-        model.addWord("SWIFT");
-        model.addWord("KOTLIN");
-        model.addWord("OBJECTIVEC");
-        model.addWord("VARIABLE");
-        model.addWord("JAVA");
-        model.addWord("MOBILE");
+        if (!model.initialized){
+            model.addWord("SWIFT");
+            model.addWord("KOTLIN");
+            model.addWord("OBJECTIVEC");
+            model.addWord("VARIABLE");
+            model.addWord("JAVA");
+            model.addWord("MOBILE");
 
-        if (model.generate()){
-            Log.d("Generator","SUCCESS");
-        } else {
-            Log.d("Generator","FAILURE");
+            if (model.generate()){
+                Log.d("Generator","SUCCESS");
+            } else {
+                Log.d("Generator","FAILURE");
+            }
+
+            Log.d("Grid", String.valueOf(model.grid));
+            model.initialized = true;
         }
-
-        Log.d("Grid", String.valueOf(model.grid));
 
         wordGrid = findViewById(R.id.wordGrid);
         wordGrid.setLayoutManager(new GridLayoutManager(this,model.size){
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         letterAdapter  = new LetterAdapter(model.grid, model.selectionArray, wordGrid);
         wordGrid.addOnItemTouchListener(new LetterTouchListener(this,model.size));
         wordGrid.setAdapter(letterAdapter);
+        letterAdapter.reload();
 
         wordList = findViewById(R.id.wordList);
         wordList.setLayoutManager(new LinearLayoutManager(this));
