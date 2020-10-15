@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
     RecyclerView wordGrid;
     RecyclerView wordList;
     WordAdapter wordAdapter;
+    LinearLayout wrapper;
 
     Direction selectionStart; //holds beginning of any touch selection
     @Override
@@ -77,11 +79,21 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_UP){
+            Log.d("touch", "intercepting action up");
+            if (validateSelection()){
+                letterAdapter.reload();
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     public void onLetterTouch(View v, int positionX, int positionY, MotionEvent event) {
         Log.d("tEvent", event.toString());
         boolean reloadNecessary = false;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            validateSelection(); //must run this because last selection won't be cleared if you drag out of the recyclerview
             Log.d("touch", "start position is x " + positionX + " and y " + positionY);
             model.startSelection(positionX, positionY);
             model.setLastSelectionEnd(positionX, positionY); //need to run this in case user releases without moving
