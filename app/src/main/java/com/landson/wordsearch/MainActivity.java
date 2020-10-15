@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
             if (validateSelection()){
                 letterAdapter.reload();
             }
+            return true;
         }
         return super.dispatchTouchEvent(ev);
     }
