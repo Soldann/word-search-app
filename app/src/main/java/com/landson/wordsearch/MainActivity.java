@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -78,6 +79,34 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
         wordList.setAdapter(wordAdapter);
     }
 
+    private void startGame(){
+        if (!model.generated){
+            AlertDialog.Builder failDialog = new AlertDialog.Builder(this);
+            failDialog.setTitle("ERROR");
+            failDialog.setMessage("Could not generate a valid word search");
+            failDialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startGame();
+                    dialogInterface.dismiss();
+                }
+            });
+            failDialog.create().show();
+
+            //retry everything
+            model.restart();
+            letterAdapter.reset();
+            wordAdapter.notifyDataSetChanged();
+            Log.d("Generator", "retrying");
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startGame();
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_UP){
@@ -127,11 +156,7 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //restart code
-                                model.restart(); //toss away model and make a new one
-                                //reload views
-                                letterAdapter.reset();
-                                wordAdapter.notifyDataSetChanged();
+                                startGame();
                             }
                         });
 

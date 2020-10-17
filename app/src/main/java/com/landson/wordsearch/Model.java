@@ -16,6 +16,7 @@ public class Model extends ViewModel {
     ArrayList<ArrayList<Direction>> selectionArray;
     boolean fillEmptySpace = true; //boolean to not fill empty space when debugging
     boolean initialized; //boolean to keep track of if game has been initialized
+    boolean generated; //store if game has been generated
 
     Random random = new Random();
 
@@ -28,6 +29,7 @@ public class Model extends ViewModel {
         words = new ArrayList<>();
         selectionArray = new ArrayList<>();
         initialized = false;
+        generated = false;
     }
 
     public void addWord(String w){
@@ -35,11 +37,11 @@ public class Model extends ViewModel {
     }
 
     public boolean generate(){
-        boolean res = generateHelper(0);
+        generated = generateHelper(0);
         if (fillEmptySpace){
             fillEmpty();
         }
-        return res;
+        return generated;
     }
 
     private boolean generateHelper(int tries){ //return true if successful, false if not
@@ -190,6 +192,7 @@ public class Model extends ViewModel {
 
 
     public boolean restart(){
+        generated = false;
         for (Word w : words){
             w.found = false;
         }
