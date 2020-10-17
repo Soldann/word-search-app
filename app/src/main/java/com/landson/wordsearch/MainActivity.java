@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements LetterAdapter.Let
                             }
                         });
 
+                alertBuilder.setCancelable(false);
+
                 alertBuilder.create().show();
             }
         }
